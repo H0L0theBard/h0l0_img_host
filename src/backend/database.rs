@@ -75,7 +75,9 @@ impl User {
         let mut uid = 0;
         let conn = Connection::open("./users.db").expect("db fucked");
         let mut stmt = conn
-            .prepare(&(("SELECT uid FROM Users WHERE APIKey =").to_owned() + "'" + &hash_key(key) + "'"))
+            .prepare(
+                &(("SELECT uid FROM Users WHERE APIKey =").to_owned() + "'" + &hash_key(key) + "'"),
+            )
             .unwrap();
         let mut rows = stmt.query([]).unwrap();
         while let Some(row) = rows.next().unwrap() {
@@ -91,7 +93,9 @@ impl User {
 
         let conn = Connection::open("./users.db").expect("db fucked");
         let mut stmt = conn
-            .prepare(&(("SELECT * FROM Users WHERE APIKey =").to_owned() + "'" + &hash_key(key) + "'"))
+            .prepare(
+                &(("SELECT * FROM Users WHERE APIKey =").to_owned() + "'" + &hash_key(key) + "'"),
+            )
             .unwrap();
         let mut rows = stmt.query([]).unwrap();
         while let Some(row) = rows.next().unwrap() {
@@ -216,7 +220,9 @@ impl Img {
     pub async fn get_images_from_key(key: String) -> String {
         let conn = Connection::open("./users.db").expect("db fucked");
         let mut stmt = conn
-            .prepare(&(("SELECT uid FROM Users WHERE APIKey =").to_owned() + "'" + &hash_key(key) + "'"))
+            .prepare(
+                &(("SELECT uid FROM Users WHERE APIKey =").to_owned() + "'" + &hash_key(key) + "'"),
+            )
             .unwrap();
         let mut rows = stmt.query([]).unwrap();
         let mut uid: Vec<usize> = Vec::new();

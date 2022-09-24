@@ -7,7 +7,10 @@ pub async fn key_check(key: String) -> bool {
     if key.is_empty() == false {
         let mut stmt = conn
             .prepare(
-                &(("SELECT ALL APIKey FROM Users WHERE APIKey =").to_owned() + "'" + &hash_key(key.clone()) + "'"),
+                &(("SELECT ALL APIKey FROM Users WHERE APIKey =").to_owned()
+                    + "'"
+                    + &hash_key(key.clone())
+                    + "'"),
             )
             .unwrap();
         let mut rows = stmt.query([]).unwrap();

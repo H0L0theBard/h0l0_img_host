@@ -143,7 +143,7 @@ fn rocket() -> _ {
         User::new(DefaultUsername, true);
     }
 
-    if Path::new("./img").exists() != true{
+    if Path::new("./img").exists() != true {
         std::fs::create_dir("./img");
     }
 
