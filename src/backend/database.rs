@@ -46,12 +46,12 @@ pub struct User {
 
 #[derive(Serialize)]
 pub struct UserData {
-    pub(crate) username: String,
-    pub(crate) uid: usize,
-    pub(crate) is_admin: usize,
-    pub(crate) upload_count: usize,
-    pub(crate) uploaded_bytes: u64,
-    pub(crate) timestamp: usize,
+    pub username: String,
+    pub uid: usize,
+    pub is_admin: usize,
+    pub upload_count: usize,
+    pub uploaded_bytes: u64,
+    pub timestamp: usize,
 }
 
 impl User {

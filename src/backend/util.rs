@@ -61,6 +61,5 @@ pub fn hash_key(key: String) -> String {
     hasher.update(key.as_bytes());
     let result = hasher.finalize();
     let hash_string = format!("{:x}", result);
-    println!("{}", hash_string);
     return hash_string;
 }

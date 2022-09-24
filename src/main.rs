@@ -56,6 +56,7 @@ struct Delete {
     apikey: String,
     filename: String,
 }
+
 #[post("/", data = "<request>")]
 async fn login(request: Form<Key>) -> Result<Json<UserData>, Status> {
     if key_check(request.apikey.to_string()).await {
