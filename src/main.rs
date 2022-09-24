@@ -22,7 +22,7 @@ use backend::database::*;
 mod backend;
 mod frontend;
 
-const DefaultUsername: &str = "Admin";
+const DEFAULT_USERNAME: &str = "Admin";
 
 #[derive(FromForm)]
 pub struct Upload<'r> {
@@ -140,12 +140,22 @@ fn rocket() -> _ {
     if Path::new("./users.db").is_file() == false {
         generate_salt_string();
         make_db().unwrap();
-        User::new(DefaultUsername, true);
+        User::new(DEFAULT_USERNAME, true);
     }
 
     if Path::new("./img").exists() != true {
-        std::fs::create_dir("./img");
+        match std::fs::create_dir("./img"){
+            Ok(_) => println!("image directory created"),
+            Err(_) => println!("image directory fucked up. probably permissions"),
+        }
     }
+    
+    if Path::new("./tmp").exists() != true {
+        match std::fs::create_dir("./tmp"){
+            Ok(_) => println!("tmp directory created"),
+            Err(_) => println!("tmp directory fucked up. probably permissions"),
+        }    }
+
 
     let figment = rocket::Config::figment()
         .merge((
