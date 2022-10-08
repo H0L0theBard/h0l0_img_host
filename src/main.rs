@@ -13,7 +13,7 @@ use rocket::http::Status;
 use rocket::serde::{Deserialize, Serialize};
 
 use backend::util::*;
-use backend::verification::*;
+use backend::auth::*;
 
 use frontend::webpages::*;
 
@@ -59,7 +59,7 @@ struct Delete {
 
 #[post("/", data = "<request>")]
 async fn login(request: Form<Key>) -> Result<Json<UserData>, Status> {
-    if key_check(request.apikey.to_string()).await {
+    if Auth::key_check(request.apikey.to_string()).await {
         Ok(User::get_user_data(request.apikey.to_string()))
     } else {
         Err(Status::NotAcceptable)
@@ -68,7 +68,7 @@ async fn login(request: Form<Key>) -> Result<Json<UserData>, Status> {
 
 #[post("/img", data = "<request>")]
 async fn img(request: Form<Key>) -> Result<String, Status> {
-    if key_check(request.apikey.to_string()).await {
+    if Auth::key_check(request.apikey.to_string()).await {
         Ok(Img::get_images_from_key(request.apikey.to_string()).await)
     } else {
         Err(Status::NotAcceptable)
@@ -78,7 +78,7 @@ async fn img(request: Form<Key>) -> Result<String, Status> {
 #[post("/upload", data = "<image>")]
 async fn upload(image: Form<Upload<'_>>) -> Status {
     let valid_extensions = vec!["png", "gif", "jpg", "jpeg", "mp4"];
-    if key_check(image.apikey.to_string()).await
+    if Auth::key_check(image.apikey.to_string()).await
         && valid_extensions.contains(&image.extension.as_str())
     {
         let key = image.apikey.to_string();
@@ -91,7 +91,7 @@ async fn upload(image: Form<Upload<'_>>) -> Status {
 
 #[delete("/delete", data = "<request>")]
 async fn del(request: Form<Delete>) -> Status {
-    if key_check(request.apikey.to_string()).await {
+    if Auth::key_check(request.apikey.to_string()).await {
         Img::delete(
             User::get_uid_from_key(request.apikey.to_string()),
             request.filename.clone(),
@@ -104,7 +104,7 @@ async fn del(request: Form<Delete>) -> Status {
 }
 #[delete("/nuke", data = "<request>")]
 async fn nuke(request: Form<Key>) -> Status {
-    if key_check(request.apikey.to_string()).await {
+    if Auth::key_check(request.apikey.to_string()).await {
         User::nuke(request.apikey.to_string()).await;
         Status::Accepted
     } else {
@@ -114,8 +114,8 @@ async fn nuke(request: Form<Key>) -> Status {
 
 #[post("/new", data = "<request>")]
 async fn new(request: Form<NewUser>) -> Status {
-    if key_check(request.apikey.to_string()).await
-        && is_admin_check(request.apikey.to_string()).await
+    if Auth::key_check(request.apikey.to_string()).await
+        && Auth::is_admin_check(request.apikey.to_string()).await
     {
         User::new(&request.username, request.admin);
         Status::Accepted

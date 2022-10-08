@@ -1,3 +1,3 @@
 pub mod database;
 pub mod util;
-pub mod verification;
+pub mod auth;
