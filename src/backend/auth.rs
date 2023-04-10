@@ -7,7 +7,7 @@ pub struct Auth{}
 impl Auth{
     pub async fn key_check(key: String) -> bool {
         let conn = Connection::open("./users.db").expect("db fucked");
-        if key.is_empty() == false {
+        if !key.is_empty() {
             let mut stmt = conn
                 .prepare(
                     &(("SELECT ALL APIKey FROM Users WHERE APIKey =").to_owned()
@@ -33,7 +33,7 @@ impl Auth{
     
     pub async fn is_admin_check(key: String) -> bool {
         let conn = Connection::open("./users.db").expect("db fucked");
-        if key.is_empty() == false {
+        if !key.is_empty() {
             let mut stmt = conn
                 .prepare(&("SELECT ALL ApiKey FROM Users WHERE isAdmin = 0"))
                 .unwrap();

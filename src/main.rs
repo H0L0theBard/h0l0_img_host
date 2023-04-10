@@ -137,20 +137,20 @@ async fn stats() -> Json<Stats> {
 #[launch]
 fn rocket() -> _ {
     //first time setup if users.db doesn't exist
-    if Path::new("./users.db").is_file() == false {
+    if !Path::new("./users.db").is_file() {
         generate_salt_string();
         make_db().unwrap();
         User::new(DEFAULT_USERNAME, true);
     }
 
-    if Path::new("./img").exists() != true {
+    if !Path::new("./img").exists() {
         match std::fs::create_dir("./img"){
             Ok(_) => println!("image directory created"),
             Err(_) => println!("image directory fucked up. probably permissions"),
         }
     }
     
-    if Path::new("./tmp").exists() != true {
+    if !Path::new("./tmp").exists() {
         match std::fs::create_dir("./tmp"){
             Ok(_) => println!("tmp directory created"),
             Err(_) => println!("tmp directory fucked up. probably permissions"),

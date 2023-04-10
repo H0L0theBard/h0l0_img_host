@@ -125,7 +125,7 @@ impl User {
         }
         let mut timestamp: usize = 0;
 
-        if images.is_empty() != true {
+        if !images.is_empty() {
             let mut stmt = conn
                 .prepare(
                     &(("SELECT MAX(timestamp) FROM Images WHERE uid = ").to_owned()
